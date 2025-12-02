@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Klinik Digital</title>
+
+<style>
+
+    body {
+    margin: 0;
+    font-family: "Segoe UI", sans-serif;
+    background: linear-gradient(-45deg, #dbeafe, #bfdbfe, #93c5fd, #60a5fa);
+    background-size: 400% 400%;
+    animation: bgMove 10s ease infinite;
+}
+
+@keyframes bgMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+    body {
+        margin: 0;
+        font-family: "Segoe UI", sans-serif;
+        background: #eef3f9;
+    }
+
+    /* ========== GLOBAL CARD ========== */
+    .card {
+        width: 90%;
+        max-width: 420px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 14px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+        animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .title {
+        text-align: center;
+        font-size: 20px;
+        font-weight: 700;
+        color: #1e3a8a;
+        margin-bottom: 10px;
+    }
+
+    .logo {
+        display: block;
+        margin: auto;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    }
+
+    .btn {
+        width: 100%;
+        padding: 11px;
+        background: #1e3a8a;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        margin-top: 10px;
+        cursor: pointer;
+        transition: .2s;
+        font-size: 15px;
+        font-weight: 600;
+    }
+
+    .btn.secondary {
+        background: #6b7280;
+    }
+
+    .btn.alt {
+        background: #0f766e;
+    }
+
+    .btn.small {
+        width: auto;
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    input, select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #cfd8e3;
+        margin-top: 10px;
+        box-sizing: border-box;
+    }
+
+    p.small { color:#555; font-size:14px; text-align:center; }
+
+    .menu-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-top: 14px;
+    }
+
+    .menu-item {
+        background: white;
+        padding: 12px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        cursor: pointer;
+        transition: .2s;
+    }
+    .menu-item:hover {
+    transform: scale(1.04);
+    background: #eef6ff;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    }
+
+    .menu-item img {
+        width: 56px;
+        height: 56px;
+        margin-bottom:8px;
+    }
+
+    /* dokter list */
+    .dokter-list {
+        width: 90%;
+        max-width: 900px;
+        margin: 10px auto 40px;
+    }
+    .dokter-card {
+        display:flex;
+        gap:14px;
+        background:white;
+        padding:12px;
+        border-radius:12px;
+        margin-bottom:12px;
+        box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+        align-items:center;
+    }
+    .dokter-card img {
+        width:90px;
+        height:90px;
+        object-fit:cover;
+        border-radius:8px;
+    }
+    .dokter-info h4 { margin:0 0 6px 0; }
+    .dokter-info p { margin:2px 0; color:#444; font-size:14px; }
+
+    .result-box {
+        background:#eef6ff;
+        padding:12px;
+        border-radius:8px;
+        margin-top:12px;
+        border-left:4px solid #1e3a8a;
+        color:#063970;
+    }
+
+    .antrian {
+        text-align:center;
+        font-size:36px;
+        font-weight:800;
+        color:#1e3a8a;
+        padding:18px;
+        background:#fff;
+        border-radius:14px;
+        box-shadow:0 6px 14px rgba(0,0,0,0.08);
+        width:200px;
+        margin:14px auto;
+    }
+
+    /* responsive */
+    @media (max-width:600px){
+        .dokter-card { flex-direction:column; align-items:flex-start; }
+        .dokter-list { padding:10px; }
+        .card { margin:20px 10px; }
+    }
+</style>
+</head>
+
+<body>
+
+<!-- click sound -->
+<audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7c3e18c853.mp3?filename=click-124467.mp3"></audio>
+
+<!-- ========================================================= -->
+<!-- PAGE 1 : PILIH MASUK SEBAGAI -->
+<!-- ========================================================= -->
+<div id="menu-awal" class="card" style="display:block">
+    <img class="logo" src="https://img.icons8.com/color/200/hospital-3.png" alt="logo klinik">
+    <div class="title">Selamat Datang</div>
+    <p class="small">Silakan pilih masuk sebagai:</p>
+
+    <button class="btn" onclick="show('login-pasien')">Masuk Sebagai Pasien</button>
+    <button class="btn alt" onclick="show('login-admin')">Masuk Sebagai Admin</button>
+</div>
+
+<!-- ========================================================= -->
+<!-- PAGE 2 : LOGIN PASIEN -->
+<!-- ========================================================= -->
+<div id="login-pasien" class="card" style="display:none">
+    <div class="title">Registrasi Pasien</div>
+
+    <input id="pNama" type="text" placeholder="Nama">
+    <input id="pNIK" type="text" placeholder="NIK">
+    <input id="pAlamat" type="text" placeholder="Alamat">
+
+    <button class="btn" onclick="submitPasien()">Daftar & Masuk</button>
+    <button class="btn secondary" onclick="show('menu-awal')">Kembali</button>
+
+    <div id="pesanReg"></div>
+</div>
+
+<!-- ========================================================= -->
+<!-- PAGE 3 : LOGIN ADMIN -->
+<!-- ========================================================= -->
+<div id="login-admin" class="card" style="display:none">
+    <div class="title">Login Admin</div>
+
+    <input id="aUser" type="text" placeholder="Username">
+    <input id="aPass" type="password" placeholder="Password">
+
+    <button class="btn" onclick="submitAdmin()">Masuk</button>
+    <button class="btn secondary" onclick="show('menu-awal')">Kembali</button>
+
+    <div id="pesanAdmin"></div>
+</div>
+
+<!-- ========================================================= -->
+<!-- PAGE 4 : MENU UTAMA PASIEN -->
+<!-- ========================================================= -->
+<div id="menu-pasien" class="card" style="display:none">
+    <img class="logo" src="https://img.icons8.com/color/200/user-female-circle.png" alt="pasien">
+    <div class="title">Menu Pasien</div>
+
+    <div class="menu-grid">
+        <div class="menu-item" id="m-janji">
+            <img src="https://img.icons8.com/color/96/planner.png" alt="">
+            <p>Membuat Janji Temu</p>
+        </div>
+        <div class="menu-item" id="m-hasil">
+            <img src="https://img.icons8.com/color/96/health-checkup.png" alt="">
+            <p>Melihat Hasil Pemeriksaan</p>
+        </div>
+        <div class="menu-item" id="m-bayar">
+            <img src="https://img.icons8.com/color/96/money.png" alt="">
+            <p>Melakukan Pembayaran</p>
+        </div>
+        <div class="menu-item" id="m-resep">
+            <img src="https://static-rose-oszsvue7d8-6m2lrxszms.edgeone.dev/84714-removebg-preview.png " alt="">
+            <p>Menerima Resep Dokter</p>
+        </div>
+    </div>
+
+    <button class="btn secondary" onclick="show('menu-awal')">Keluar</button>
+</div>
+
+<!-- ========================================================= -->
+<!-- DAFTAR DOKTER (halaman terpisah tapi ditampilkan di bawah) -->
+<!-- ========================================================= -->
+<div id="dokter-page" class="dokter-list" style="display:none">
+    <div class="title" style="text-align:left;max-width:900px;margin:18px auto 6px;">Jadwal Dokter</div>
+
+    <!-- DOKTER 1 -->
+    <div class="dokter-card" data-nama="dr. Sinta Pratiwi" data-spesialis="Anak" data-jadwal="Senin & Rabu — 09:00 - 12:00" onclick="pilihDokter(this)">
+        <img src="https://official-emerald-n2r6y4qdnh-poj7mfwejo.edgeone.dev/IMG_20251202_152618.jpg" alt="Dokter Anak">
+        <div class="dokter-info">
+            <h4>dr. Sinta Pratiwi</h4>
+            <p><b>Spesialis:</b> Anak</p>
+            <p><b>Jadwal:</b> Senin & Rabu — 09:00 - 12:00</p>
+            <p><b>Pengalaman:</b> 10 Tahun</p>
+        </div>
+    </div>
+
+    <!-- DOKTER 2 -->
+    <div class="dokter-card" data-nama="dr. Arif Nugroho" data-spesialis="Penyakit Dalam" data-jadwal="Selasa & Kamis — 13:00 - 16:00" onclick="pilihDokter(this)">
+        <img src="https://better-chocolate-ok53xschpw-tkqjqlelzo.edgeone.dev/IMG_20251202_152506.jpg  " alt="Dokter Penyakit Dalam">
+        <div class="dokter-info">
+            <h4>dr. Arif Nugroho</h4>
+            <p><b>Spesialis:</b> Penyakit Dalam</p>
+            <p><b>Jadwal:</b> Selasa & Kamis — 13:00 - 16:00</p>
+            <p><b>Pengalaman:</b> 12 Tahun</p>
+        </div>
+    </div>
+
+    <!-- DOKTER 3 -->
+    <div class="dokter-card" data-nama="dr. Maya Lestari" data-spesialis="Dokter Umum" data-jadwal="Setiap Hari — 08:00 - 14:00" onclick="pilihDokter(this)">
+        <img src="https://fast-harlequin-8zthort4cp-0vd1jw14vh.edgeone.dev/16ab9a2c3adf66a55872a929454fedf4.jpg" alt="Dokter Umum">
+        <div class="dokter-info">
+            <h4>dr. Maya Lestari</h4>
+            <p><b>Spesialis:</b> Dokter Umum</p>
+            <p><b>Jadwal:</b> Setiap Hari — 08:00 - 14:00</p>
+            <p><b>Pengalaman:</b> 7 Tahun</p>
+        </div>
+    </div>
+
+    <!-- DOKTER 4 -->
+    <div class="dokter-card" data-nama="dr. Rudi Hartono" data-spesialis="Bedah" data-jadwal="Senin & Jumat — 14:00 - 18:00" onclick="pilihDokter(this)">
+        <img src="https://tired-crimson-8vrhmqkdxz-vwtm0j9vcc.edgeone.dev/IMG_20251202_152601.jpg" alt="Spesialis Bedah">
+        <div class="dokter-info">
+            <h4>dr. Rudi Hartono</h4>
+            <p><b>Spesialis:</b> Bedah</p>
+            <p><b>Jadwal:</b> Senin & Jumat — 14:00 - 18:00</p>
+            <p><b>Pengalaman:</b> 15 Tahun</p>
+        </div>
+    </div>
+
+    <!-- DOKTER 5 -->
+    <div class="dokter-card" data-nama="dr. Siti Rahmawati" data-spesialis="Kandungan" data-jadwal="Selasa, Kamis — 10:00 - 15:00" onclick="pilihDokter(this)">
+        <img src="https://circular-ivory-ybskhctohq-0wwq4nvsr3.edgeone.dev/IMG_20251202_152529.jpg " alt="Dokter Kandungan">
+        <div class="dokter-info">
+            <h4>dr. Siti Rahmawati</h4>
+            <p><b>Spesialis:</b> Kandungan</p>
+            <p><b>Jadwal:</b> Selasa, Kamis — 10:00 - 15:00</p>
+            <p><b>Pengalaman:</b> 9 Tahun</p>
+        </div>
+    </div>
+
+    <div style="text-align:center; margin:18px;">
+        <button class="btn secondary" onclick="show('menu-pasien')">Kembali</button>
+    </div>
+</div>
+
+<!-- ========================================================= -->
+<!-- HALAMAN KONFIRMASI JANJI (menampilkan data dokter benar) -->
+<!-- ========================================================= -->
+<div id="konfirmasi-janji" class="card" style="display:none">
+    <div class="title">Konfirmasi Janji Temu</div>
+
+    <div id="infoDokter" style="margin-bottom:12px"></div>
+
+    <label>Nama Pasien</label>
+    <input id="namaPasienJanji" placeholder="Masukkan nama">
+
+    <label>Catatan (opsional)</label>
+    <input id="catatanJanji" placeholder="Keluhan singkat / catatan">
+
+    <button class="btn" onclick="konfirmasiSimpan()">Konfirmasi Janji</button>
+    <button class="btn secondary" onclick="show('dokter-page')">Pilih Ulang Dokter</button>
+
+    <div id="hasilKonfirmasi"></div>
+</div>
+
+<!-- ========================================================= -->
+<!-- HALAMAN ANTRIAN -->
+<!-- ========================================================= -->
+<div id="halaman-antrian" class="card" style="display:none">
+    <div class="title">Nomor Antrian</div>
+    <div id="nomorAntrianBox" class="antrian">-</div>
+
+    <div id="detailAntrian" class="result-box" style="display:none"></div>
+
+    <button class="btn secondary" onclick="show('menu-pasien')">Selesai</button>
+</div>
+
+<!-- ========================================================= -->
+<!-- HASIL PEMERIKSAAN (barcode) -->
+<!-- ========================================================= -->
+<div id="halaman-hasil" class="card" style="display:none">
+    <div class="title">Hasil Pemeriksaan</div>
+
+    <p class="small">Scan / gunakan barcode ini untuk melihat hasil.</p>
+    <img src="https://attractive-amethyst-3h7kxnr7ar-9zi0ra95a6.edgeone.dev/Usrk0N_qrcode.png"
+         alt="barcode" style="display:block;margin:12px auto;width:200px;border-radius:8px;box-shadow:0 6px 12px rgba(0,0,0,0.08)">
+
+    <button class="btn secondary" onclick="show('menu-pasien')">Kembali</button>
+</div>
+
+<!-- ========================================================= -->
+<!-- PEMBAYARAN -->
+<!-- ========================================================= -->
+<div id="halaman-bayar" class="card" style="display:none">
+    <div class="title">Pembayaran</div>
+
+    <label>Jumlah Tagihan (Rp)</label>
+    <input id="amountTagihan" type="number" placeholder="85.000">
+
+    <button class="btn" onclick="prosesBayar()">Bayar Tagihan</button>
+    <button class="btn secondary" onclick="show('menu-pasien')">Kembali</button>
+
+    <div id="hasilBayarBox"></div>
+</div>
+
+<!-- KWITANSI -->
+<div id="halaman-kwitansi" class="card" style="display:none">
+    <div class="title">Kwitansi</div>
+
+    <img src="https://logical-maroon-h1afa9pqkh-sea3fjaftu.edgeone.dev/80b593382c87050e6f74109e4d68d9b7.jpg"
+         alt="kwitansi" style="display:block;margin:10px auto;width:90%;border-radius:8px;box-shadow:0 6px 12px rgba(0,0,0,0.08)">
+
+    <div class="result-box" style="margin-top:12px">
+        Pembayaran berhasil. Kwitansi di atas bisa disimpan.
+    </div>
+
+    <button class="btn secondary" onclick="show('menu-pasien')">Selesai</button>
+</div>
+
+<!-- ========================================================= -->
+<!-- RESEP & APOTEK -->
+<!-- ========================================================= -->
+
+<!-- ========================== -->
+<!--      HALAMAN RESEP        -->
+<!-- ========================== -->
+<div id="halaman-resep" class="card" style="display:none">
+    <div class="title">Resep & Apotek</div>
+
+    <label class="label">Pilih Obat :</label>
+    <div class="select-box">
+        <select id="pilihanObat" onchange="tampilkanObat()">
+            <option value="">-- pilih obat --</option>
+            <option value="Obat Vitamin">Obat Vitamin</option>
+            <option value="Obat Pereda Nyeri">Obat Pereda Nyeri</option>
+            <option value="Obat Sakit Kepala">Obat Sakit Kepala</option>
+            <option value="Obat Mual">Obat Mual</option>
+            <option value="Obat Mag">Obat Mag</option>
+        </select>
+    </div>
+
+    <div class="result-box" id="hasilResep" style="margin-top:15px; display:none"></div>
+
+    <!-- TEMPAT NOMOR ANTRIAN DITAMPILKAN -->
+    <div id="nomorAntrianBox" class="result-box" style="margin-top:10px; display:none; font-weight:bold;"></div>
+
+    <div style="margin-top:12px">
+        <button class="btn" onclick="ambilResep()">Ambil Resep</button>
+        <button class="btn secondary" onclick="cekKetersediaan()">Cek Ketersediaan Obat</button>
+    </div>
+
+    <button class="btn secondary" style="margin-top:12px" onclick="show('menu-pasien')">Kembali</button>
+</div>
+
+<!-- ========================== -->
+<!--    HALAMAN CEK OBAT       -->
+<!-- ========================== -->
+<div id="halaman-cek-obat" class="card" style="display:none">
+    <div class="title">Cek Ketersediaan Obat</div>
+
+    <div class="result-box">
+        <p>Obat Vitamin — <b>✓ Tersedia</b></p>
+        <p>Obat Pereda Nyeri — <b>✓ Tersedia</b></p>
+        <p>Obat Sakit Kepala — <b>✓ Tersedia</b></p>
+        <p>Obat Mual — <b>✓ Tersedia</b></p>
+        <p>Obat Mag — <b>✓ Tersedia</b></p>
+    </div>
+
+    <button class="btn secondary" onclick="show('halaman-resep')">Kembali</button>
+</div>
+
+<!-- ========================== -->
+<!--  HALAMAN AMBIL RESEP      -->
+<!-- ========================== -->
+<div id="halaman-ambil-resep" class="card" style="display:none">
+    <div class="title">Ambil Resep di Apotek</div>
+
+    <div class="result-box">
+        <p id="tampilNomorAntrian"
+           style="font-weight:bold; margin-bottom:12px; font-size:18px; color:#003366;">
+        </p>
+
+        Obat pilihanmu sudah siap.
+        Silakan ambil di apotek dan tunjukkan nomor antrian.
+    </div>
+
+    <button class="btn secondary" onclick="show('menu-pasien')">Selesai</button>
+</div>
+
+<!-- ========================== -->
+<!--     SCRIPT PENDUKUNG      -->
+<!-- ========================== -->
+<script>
+
+let nomorAntrian = "";
+let obatDipilih = "";
+
+// Generator random nomor antrian seperti A439
+function generateNomorAntrian() {
+    const huruf = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const H = huruf[Math.floor(Math.random() * huruf.length)];
+    const angka = Math.floor(100 + Math.random() * 900);
+    return H + angka;
+}
+
+// Saat obat dipilih -> tampilkan + buat nomor antrian
+function tampilkanObat() {
+    const pilih = document.getElementById("pilihanObat").value;
+    const box = document.getElementById("hasilResep");
+    const boxAntrian = document.getElementById("nomorAntrianBox");
+
+    if (pilih === "") {
+        box.style.display = "none";
+        boxAntrian.style.display = "none";
+        return;
+    }
+
+    obatDipilih = pilih;
+
+    box.innerHTML = "<b>Obat yang dipilih:</b> " + pilih;
+    box.style.display = "block";
+
+    nomorAntrian = generateNomorAntrian();
+
+    boxAntrian.innerHTML = 
+        "Nomor Antrian: <span style='font-size:22px; color:#003366; font-weight:bold;'>" +
+        nomorAntrian + "</span>";
+    boxAntrian.style.display = "block";
+}
+
+// Tekan Ambil Resep
+function ambilResep() {
+    if (obatDipilih === "" || nomorAntrian === "") {
+        alert("Pilih obat terlebih dahulu!");
+        return;
+    }
+
+    document.getElementById("tampilNomorAntrian").innerHTML =
+        "Nomor Antrian Anda: <br><span style='font-size:26px; font-weight:bold;'>" +
+        nomorAntrian + "</span>";
+
+    show("halaman-ambil-resep");
+}
+
+// Cek ketersediaan obat
+function cekKetersediaan() {
+    show("halaman-cek-obat");
+}
+
+// Navigasi antar halaman
+function show(id) {
+    document.querySelectorAll(".card, .dokter-list").forEach(el => {
+        el.style.display = "none";
+    });
+
+    document.getElementById(id).style.display = "block";
+
+    // Sound effect
+    document.getElementById("clickSound").play();
+}
+
+
+</script>
+
+
+<!-- ========================================================= -->
+<!-- MENU ADMIN & SUBMENU (tetap sederhana) -->
+<!-- ========================================================= -->
+<div id="menu-admin" class="card" style="display:none">
+    <img class="logo" src="https://img.icons8.com/color/200/admin-settings-male.png" alt="admin">
+    <div class="title">Menu Admin</div>
+
+    <div class="menu-grid">
+        <div class="menu-item" onclick="show('sub-apotik')">
+            <img src="https://img.icons8.com/color/96/pill.png" alt=""><p>Petugas Apotik</p>
+        </div>
+        <div class="menu-item" onclick="show('sub-kepala')">
+            <img src="https://img.icons8.com/color/96/manager.png" alt=""><p>Kepala Klinik</p>
+        </div>
+        <div class="menu-item" onclick="show('sub-dokter')">
+            <img src="https://img.icons8.com/color/96/stethoscope.png" alt=""><p>Dokter</p>
+        </div>
+        <div class="menu-item" onclick="show('sub-adminis')">
+            <img src="https://img.icons8.com/color/96/report-card.png" alt=""><p>Administrasi</p>
+        </div>
+    </div>
+
+    <button class="btn secondary" onclick="show('menu-awal')">Logout</button>
+</div>
+
+<div id="sub-apotik" class="card" style="display:none">
+    <div class="title">Petugas Apotik</div>
+    <ul>
+        <li>Menyerahkan Obat ke Pasien</li>
+        <li>Menerima Resep Dokter</li>
+        <li>Mengelola Stok Obat</li>
+        <li>Laporan</li>
+    </ul>
+    <button class="btn secondary" onclick="show('menu-admin')">Kembali</button>
+</div>
+
+<div id="sub-kepala" class="card" style="display:none">
+    <div class="title">Kepala Klinik</div>
+    <ul>
+        <li>Evaluasi</li>
+        <li>Review Rekam Medis</li>
+        <li>Laporan</li>
+    </ul>
+    <button class="btn secondary" onclick="show('menu-admin')">Kembali</button>
+</div>
+
+<div id="sub-dokter" class="card" style="display:none">
+    <div class="title">Menu Dokter</div>
+    <ul>
+        <li>Melihat Data Pasien</li>
+        <li>Memberikan Resep Obat</li>
+        <li>Melakukan Pemeriksaan</li>
+        <li>Melakukan Rekam Medis</li>
+    </ul>
+    <button class="btn secondary" onclick="show('menu-admin')">Kembali</button>
+</div>
+
+<div id="sub-adminis" class="card" style="display:none">
+    <div class="title">Administrasi</div>
+    <ul>
+        <li>Mencatat Pembayaran</li>
+        <li>Melihat Transaksi Harian</li>
+        <li>Laporan</li>
+    </ul>
+    <button class="btn secondary" onclick="show('menu-admin')">Kembali</button>
+</div>
+
+<!-- ========================================================= -->
+<!-- JAVASCRIPT CONTROLLER -->
+<!-- ========================================================= -->
+<script>
+// helper: play click sound
+function playClick(){
+    const audio = document.getElementById('clickSound');
+    if(audio){
+        audio.currentTime = 0;
+        audio.play().catch(()=>{/* ignore play errors */});
+    }
+}
+
+// show / hide main cards
+function show(id){
+    playClick();
+    // hide all cards
+    document.querySelectorAll('.card, .dokter-list').forEach(el=> el.style.display = 'none');
+    // show requested
+    const el = document.getElementById(id);
+    if(el) el.style.display = 'block';
+    // scroll top
+    window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// submit registrasi pasien
+function submitPasien(){
+    playClick();
+    const nama = document.getElementById('pNama').value.trim();
+    const nik = document.getElementById('pNIK').value.trim();
+    const alamat = document.getElementById('pAlamat').value.trim();
+    const box = document.getElementById('pesanReg');
+
+    if(!nama || !nik || !alamat){
+        box.innerHTML = '<div class="result-box">Isi semua data!</div>';
+        return;
+    }
+
+    // simpan sementara di session untuk ditampilkan di menu pasien atau janji
+    sessionStorage.setItem('pasien_nama', nama);
+    sessionStorage.setItem('pasien_nik', nik);
+    sessionStorage.setItem('pasien_alamat', alamat);
+
+    box.innerHTML = '<div class="result-box">Registrasi berhasil. Selamat datang, '+nama+'</div>';
+
+    setTimeout(()=> show('menu-pasien'), 900);
+}
+
+// login admin
+function submitAdmin(){
+    playClick();
+    const u = document.getElementById('aUser').value.trim();
+    const p = document.getElementById('aPass').value.trim();
+    const box = document.getElementById('pesanAdmin');
+
+    if(u === 'kelompok 2' && p === 'byte'){
+        box.innerHTML = '<div class="result-box">Login admin berhasil.</div>';
+        setTimeout(()=> show('menu-admin'), 700);
+    } else {
+        box.innerHTML = '<div class="result-box">Username atau password salah.</div>';
+    }
+}
+
+/* -----------------------------
+   MENU PASIEN: event bind
+   -----------------------------*/
+document.getElementById('m-janji').addEventListener('click', ()=> show('dokter-page'));
+document.getElementById('m-hasil').addEventListener('click', ()=> show('halaman-hasil'));
+document.getElementById('m-bayar').addEventListener('click', ()=> show('halaman-bayar'));
+document.getElementById('m-resep').addEventListener('click', ()=> show('halaman-resep'));
+
+/* -----------------------------
+   PILIH DOKTER -> isi konfirmasi
+   -----------------------------*/
+function pilihDokter(card){
+    playClick();
+    const nama = card.getAttribute('data-nama');
+    const spes = card.getAttribute('data-spesialis');
+    const jadwal = card.getAttribute('data-jadwal');
+
+    // tampilkan di konfirmasi
+    const info = document.getElementById('infoDokter');
+    info.innerHTML = '<div class="result-box"><b>'+nama+'</b><br>'+spes+'<br>'+jadwal+'</div>';
+
+    // simpan pilihan
+    sessionStorage.setItem('pilih_dokter', nama);
+    sessionStorage.setItem('pilih_spes', spes);
+    sessionStorage.setItem('pilih_jadwal', jadwal);
+
+    // tampil konfirmasi
+    show('konfirmasi-janji');
+}
+
+/* -----------------------------
+   KONFIRMASI JANJI -> simpan & tampil antrian
+   -----------------------------*/
+function konfirmasiSimpan(){
+    playClick();
+    const namaPasien = document.getElementById('namaPasienJanji').value.trim() || sessionStorage.getItem('pasien_nama') || 'Pasien';
+    const catatan = document.getElementById('catatanJanji').value.trim();
+    const dokter = sessionStorage.getItem('pilih_dokter') || 'Dokter';
+    const spes = sessionStorage.getItem('pilih_spes') || '';
+    const jadwal = sessionStorage.getItem('pilih_jadwal') || '';
+
+    // generate nomor antrian acak A001..A999
+    const num = Math.floor(Math.random()*900) + 100;
+    const kodeAntri = 'A' + num;
+
+    // simpan data antrian ke session
+    const antrianData = {
+        kode: kodeAntri,
+        pasien: namaPasien,
+        dokter: dokter,
+        jadwal: jadwal,
+        catatan: catatan,
+        waktu: new Date().toLocaleString()
+    };
+    sessionStorage.setItem('antrian_data', JSON.stringify(antrianData));
+
+    // tampil halaman antrian
+    document.getElementById('nomorAntrianBox').textContent = kodeAntri;
+    const det = document.getElementById('detailAntrian');
+    det.style.display = 'block';
+    det.innerHTML = '<b>Pasien:</b> '+namaPasien+'<br><b>Dokter:</b> '+dokter+'<br><b>Jadwal:</b> '+jadwal;
+
+    show('halaman-antrian');
+}
+
+/* -----------------------------
+   PEMBAYARAN -> tampil kwitansi
+   -----------------------------*/
+function prosesBayar(){
+    playClick();
+    const amount = document.getElementById('amountTagihan').value || '85.000';
+    // simulasikan bayar -> tampil kwitansi
+    document.getElementById('hasilBayarBox').innerHTML = '<div class="result-box">Pembayaran Rp '+amount+' berhasil.</div>';
+    setTimeout(()=> show('halaman-kwitansi'), 900);
+}
+
+/* -----------------------------
+   RESEP & APOTEK
+   -----------------------------*/
+function ambilResep(){
+    playClick();
+    show('halaman-ambil-resep');
+}
+function cekKetersediaan(){
+    playClick();
+    show('halaman-cek-obat');
+}
+
+/* -----------------------------
+   init: set default visible page
+   -----------------------------*/
+(function init(){
+    // start at menu-awal (already visible)
+    // ensure click sound is unlocked by a user gesture; we add a listener to body
+    document.body.addEventListener('click', function one(){ 
+        const a = document.getElementById('clickSound');
+        if(a){ a.play().catch(()=>{}); a.pause(); a.currentTime = 0; }
+        document.body.removeEventListener('click', one);
+    });
+
+})();
+</script>
+
+</body>
+</html>
